@@ -8,7 +8,6 @@ import (
 type NodeRouter interface {
 	Name() string
 	RouteToPath(path string)
-	SetViewNodeId(id string)
 	GetViewNode() *html.Node
 	RegisterPath(path string, component NodeRender)
 }

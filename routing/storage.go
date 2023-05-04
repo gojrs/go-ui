@@ -35,7 +35,10 @@ func (wr *WasmRouter) startStorage(persist bool) {
 			println("could not find previous storage, creating new one")
 			privateStore = make(routeRoot)
 		}
+	} else {
+		privateStore = make(routeRoot)
 	}
+
 	for request := range wr.comChan {
 		var resp *storageResponse
 		switch request.reqType {
