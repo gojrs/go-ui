@@ -9,7 +9,7 @@ type NodeRouter interface {
 	Name() string
 	RouteToPath(path string)
 	GetViewNode() *html.Node
-	RegisterPath(path string, component NodeRender)
+	RegisterPath(path string, component NodeRender) error
 }
 
 type NodeRender interface {

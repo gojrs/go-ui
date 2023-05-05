@@ -5,6 +5,8 @@ import (
 	"github.com/gojrs/go-ui/types"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
+	"io"
+	"syscall/js"
 )
 
 type Opts struct {
@@ -75,14 +77,68 @@ func WithViewNode(node *html.Node) OptFunc {
 	}
 }
 
-func (wr *WasmRouter) Name() string                                   { return wr.name }
-func (wr *WasmRouter) RouteToPath(path string)                        {}
-func (wr *WasmRouter) SetViewNodeId(id string)                        { wr.viewId = id }
-func (wr *WasmRouter) GetViewNode() *html.Node                        { return wr.vNode }
-func (wr *WasmRouter) RegisterPath(path string, component NodeRender) {}
+func (wr *WasmRouter) Name() string { return wr.name }
+func (wr *WasmRouter) RouteToPath(path string) {
+	respC := make(chan *storageResponse, 1)
+	wr.comChan <- &storageRequest{
+		fullPath: path,
+		reqType:  storageReqFetch,
+		reply:    respC,
+	}
+	answer := <-respC
+
+	if answer.err != nil {
+		println(answer.err.Error())
+		return
+	}
+
+	bs, err := io.ReadAll(answer.component.Render())
+	if err != nil {
+		println(err.Error())
+		return
+	}
+
+	viewJS := docJs.Call("getElementById", wr.viewId)
+	viewJS.Set("innerHTML", string(bs))
+}
+func (wr *WasmRouter) SetViewNodeId(id string) { wr.viewId = id }
+func (wr *WasmRouter) GetViewNode() *html.Node { return wr.vNode }
+func (wr *WasmRouter) RegisterPath(path string, component NodeRender) error {
+	respChan := make(chan *storageResponse)
+	wr.comChan <- &storageRequest{
+		reqType:   storageReqIns,
+		fullPath:  path,
+		component: component,
+		reply:     respChan,
+	}
+	ok := <-respChan
+	if ok != nil {
+		if ok.err != nil {
+			return ok.err
+		}
+	}
+
+	return nil
+}
 
 func (wr *WasmRouter) Start() {
 	channel := make(chan struct{})
 
 	<-channel
+}
+
+type registerRouteRequest struct {
+	path      string
+	component NodeRender
+}
+
+type routeToRequest struct {
+	path   string
+	params []js.Value
+	respC  chan *routeToResponse
+}
+type routeToResponse struct {
+	component NodeRender
+	params    []js.Value
+	err       error
 }

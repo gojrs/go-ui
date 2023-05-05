@@ -11,6 +11,7 @@ import (
 var (
 	storageKey = "jrs-route-storage"
 	lStore     = js.Global().Get("window").Get("localStorage")
+	docJs      = js.Global().Get("document")
 )
 
 func writeToStorage(reader io.Reader) error {
@@ -26,7 +27,7 @@ func writeToStorage(reader io.Reader) error {
 	return nil
 }
 
-func readFromStorage() (router routeRoot, err error) {
+func readFromStorage() (router routeTrunk, err error) {
 	jItem := lStore.Call("getItem", storageKey)
 	if !jItem.Truthy() {
 		err = fmt.Errorf("could not get local from storage")

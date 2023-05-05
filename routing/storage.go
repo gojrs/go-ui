@@ -27,33 +27,33 @@ type storageResponse struct {
 }
 
 func (wr *WasmRouter) startStorage(persist bool) {
-	var privateStore routeRoot
+	var privateStore routeTrunk
 	var err error
 	if persist {
 		privateStore, err = readFromStorage()
 		if err != nil {
 			println("could not find previous storage, creating new one")
-			privateStore = make(routeRoot)
+			privateStore = make(routeTrunk)
 		}
 	} else {
-		privateStore = make(routeRoot)
+		privateStore = make(routeTrunk)
 	}
 
 	for request := range wr.comChan {
-		var resp *storageResponse
+		var resp storageResponse
 		switch request.reqType {
 		case storageReqFetch:
 			resp.component, resp.err = privateStore.fetch(request.fullPath)
-			request.reply <- resp
+			request.reply <- &resp
 		case storageReqIns:
 			privateStore.insert(request.fullPath, request.component)
-			request.reply <- resp
+			request.reply <- &resp
 		case storageReqRemove:
 			privateStore.remove(request.fullPath)
-			request.reply <- resp
+			request.reply <- &resp
 		case storageReqUpdate:
 			privateStore.update(request.fullPath, request.component)
-			request.reply <- resp
+			request.reply <- &resp
 		}
 	}
 	//close all connections

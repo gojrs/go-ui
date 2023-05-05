@@ -5,7 +5,7 @@ import (
 	"path"
 )
 
-type routeRoot map[string]routeBranch
+type routeTrunk map[string]routeBranch
 
 type routeBranch map[string]NodeRender
 
@@ -17,7 +17,7 @@ func getBaseAndSuffix(urlPath string) (string, string) {
 	return dir, base
 }
 
-func (rr routeRoot) insert(k string, val NodeRender) {
+func (rr routeTrunk) insert(k string, val NodeRender) {
 	var (
 		base, suffix = getBaseAndSuffix(k)
 	)
@@ -30,7 +30,7 @@ func (rr routeRoot) insert(k string, val NodeRender) {
 	rb.insert(suffix, val)
 }
 
-func (rr routeRoot) update(k string, val NodeRender) {
+func (rr routeTrunk) update(k string, val NodeRender) {
 	var (
 		base, suffix = getBaseAndSuffix(k)
 	)
@@ -42,7 +42,7 @@ func (rr routeRoot) update(k string, val NodeRender) {
 	rb.update(suffix, val)
 }
 
-func (rr routeRoot) remove(k string) {
+func (rr routeTrunk) remove(k string) {
 	var (
 		base, suffix = getBaseAndSuffix(k)
 	)
@@ -54,7 +54,7 @@ func (rr routeRoot) remove(k string) {
 	rb.remove(suffix)
 }
 
-func (rr routeRoot) fetch(k string) (router NodeRender, err error) {
+func (rr routeTrunk) fetch(k string) (router NodeRender, err error) {
 	var (
 		base, suffix = getBaseAndSuffix(k)
 	)
