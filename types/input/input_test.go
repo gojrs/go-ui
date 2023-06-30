@@ -285,7 +285,7 @@ func makeTestData() input.DescriberTable {
 }
 
 func TestNewElementFromAtom(t *testing.T) {
-	thing := types.NewElementFromAtom(atom.Div, html.Attribute{
+	thing := types.NewNodeFromAtom(atom.Div, html.Attribute{
 		Key: atom.Class.String(),
 		Val: "row",
 	})
@@ -294,7 +294,7 @@ func TestNewElementFromAtom(t *testing.T) {
 		println(thing.Data)
 	}
 
-	anotherTing := types.NewElementFromAtom(atom.Input, html.Attribute{
+	anotherTing := types.NewNodeFromAtom(atom.Input, html.Attribute{
 		Key: atom.Id.String(),
 		Val: "i2345",
 	})
@@ -319,7 +319,7 @@ func TestNewInputsFromDescriber(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	div := types.NewElementFromAtom(atom.Div)
+	div := types.NewNodeFromAtom(atom.Div)
 	for key, rows := range items {
 		t.Log(key)
 		for _, col := range rows {
@@ -347,7 +347,7 @@ func TestNewFormElem(t *testing.T) {
 	selectNode.Key = "select-key"
 	textAreaNode.Key = "text_area-kwy"
 	withListNode.Key = "datalist-key"
-	thing := input.NewFormElem("form-id", "This is a caption", types.NewElementFromAtom(atom.Div))
+	thing := input.NewFormElem("form-id", "This is a caption", types.NewNodeFromAtom(atom.Div))
 	thing.WithSchemaData(cols...)
 	thing.BuildForm()
 

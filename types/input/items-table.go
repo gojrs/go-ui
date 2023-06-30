@@ -24,18 +24,18 @@ func (its *ItemsTable) HtmlNode() *html.Node {
 func NewTableElem(id, cap string, pn *html.Node) *ItemsTable {
 
 	var (
-		tFoot   = types.NewElementFromAtom(atom.Tfoot)
-		caption = types.NewElementFromAtom(atom.Caption)
+		tFoot   = types.NewNodeFromAtom(atom.Tfoot)
+		caption = types.NewNodeFromAtom(atom.Caption)
 
 		it = &ItemsTable{
-			iTable: types.NewElementFromAtom(atom.Table, html.Attribute{
+			iTable: types.NewNodeFromAtom(atom.Table, html.Attribute{
 				Key: atom.Id.String(),
 				Val: fmt.Sprintf("%s-%s", itemTablePrefix, id),
 			}),
 			id:         id,
 			parent:     pn,
-			head:       types.NewElementFromAtom(atom.Thead),
-			body:       types.NewElementFromAtom(atom.Tbody),
+			head:       types.NewNodeFromAtom(atom.Thead),
+			body:       types.NewNodeFromAtom(atom.Tbody),
 			schemaData: make(DescriberTable, 0, 10),
 		}
 	)
@@ -58,7 +58,7 @@ func NewTableElem(id, cap string, pn *html.Node) *ItemsTable {
 func (its *ItemsTable) UpdateHeaderData(cols []ColumnDescriber) *ItemsTable {
 	its.columns = cols
 
-	row := types.NewElementFromAtom(atom.Tr, html.Attribute{
+	row := types.NewNodeFromAtom(atom.Tr, html.Attribute{
 		Key: "data-collection-id",
 		Val: its.id,
 	})
@@ -74,18 +74,18 @@ func (its *ItemsTable) UpdateHeaderData(cols []ColumnDescriber) *ItemsTable {
 		System:   false,
 		Classes:  nil,
 	})
-	firstChild := types.NewElementFromAtom(atom.Th)
+	firstChild := types.NewNodeFromAtom(atom.Th)
 	for _, selectRow := range selectRows {
 		firstChild.AppendChild(selectRow)
 	}
 	row.AppendChild(firstChild)
 	for _, column := range its.columns {
 		colKey := column.ColumnKey()
-		th := types.NewElementFromAtom(atom.Th, html.Attribute{
+		th := types.NewNodeFromAtom(atom.Th, html.Attribute{
 			Key: "class",
 			Val: fmt.Sprintf("col-%s", colKey),
 		})
-		h3 := types.NewElementFromAtom(atom.H3)
+		h3 := types.NewNodeFromAtom(atom.H3)
 		h3.AppendChild(&html.Node{
 			Type:     html.TextNode,
 			DataAtom: 0,
@@ -102,10 +102,10 @@ func (its *ItemsTable) LoadData(data DescriberTable) error {
 	its.schemaData = data
 	for _, rowData := range its.schemaData {
 		var (
-			tr        = types.NewElementFromAtom(atom.Tr)
-			firstTd   = types.NewElementFromAtom(atom.Td)
-			lastTd    = types.NewElementFromAtom(atom.Td)
-			selectRow = types.NewElementFromAtom(atom.Select)
+			tr        = types.NewNodeFromAtom(atom.Tr)
+			firstTd   = types.NewNodeFromAtom(atom.Td)
+			lastTd    = types.NewNodeFromAtom(atom.Td)
+			selectRow = types.NewNodeFromAtom(atom.Select)
 		)
 		firstTd.AppendChild(selectRow)
 		tr.AppendChild(firstTd)
@@ -119,7 +119,7 @@ func (its *ItemsTable) LoadData(data DescriberTable) error {
 			if err != nil {
 				return fmt.Errorf("could not create inputs %s", err.Error())
 			}
-			td := types.NewElementFromAtom(atom.Td)
+			td := types.NewNodeFromAtom(atom.Td)
 			for _, nodes := range inputs {
 				for _, node := range nodes {
 					td.AppendChild(node)

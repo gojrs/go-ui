@@ -2,7 +2,6 @@ package graphics
 
 import (
 	"golang.org/x/net/html"
-	"golang.org/x/net/html/atom"
 )
 
 type SvgElement struct {
@@ -13,5 +12,5 @@ type SvgElement struct {
 }
 
 func (svg *SvgElement) CreateDef(kind, id string, attrs ...html.Attribute) {
-	me := atom.Shape
+
 }

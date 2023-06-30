@@ -205,7 +205,7 @@ func NewInputsFromDescriber(inputs ...ColumnDescriber) (nodes map[string][]*html
 
 func NewInputNode(param *BaseInput) []*html.Node {
 	var (
-		input = types.NewElementFromAtom(atom.Input, defaultInputAttr(param)...)
+		input = types.NewNodeFromAtom(atom.Input, defaultInputAttr(param)...)
 		label = &html.Node{
 			Type:     html.ElementNode,
 			DataAtom: atom.Label,
@@ -229,7 +229,7 @@ func NewInputNode(param *BaseInput) []*html.Node {
 }
 
 func NewTextAreaNode(param *TextAreaInput) []*html.Node {
-	input := types.NewElementFromAtom(atom.Textarea, defaultInputAttr(param)...)
+	input := types.NewNodeFromAtom(atom.Textarea, defaultInputAttr(param)...)
 	label := &html.Node{
 		Type:     html.ElementNode,
 		DataAtom: atom.Label,
@@ -345,11 +345,11 @@ func NewInputWithListNode(param *WithListOptions) []*html.Node {
 func NewSelectNode(param *SelectInput) []*html.Node {
 	var label *html.Node
 	var (
-		sel  = types.NewElementFromAtom(atom.Select, defaultInputAttr(param)...)
+		sel  = types.NewNodeFromAtom(atom.Select, defaultInputAttr(param)...)
 		aFor = atom.For
 	)
 
-	label = types.NewElementFromAtom(atom.Label, []html.Attribute{
+	label = types.NewNodeFromAtom(atom.Label, []html.Attribute{
 		{
 			Key: aFor.String(),
 			Val: param.Id,
@@ -362,7 +362,7 @@ func NewSelectNode(param *SelectInput) []*html.Node {
 	})
 
 	for _, option := range param.Options {
-		opt := types.NewElementFromAtom(atom.Select, []html.Attribute{
+		opt := types.NewNodeFromAtom(atom.Select, []html.Attribute{
 			{
 				Key: atom.Value.String(),
 				Val: option.Key,

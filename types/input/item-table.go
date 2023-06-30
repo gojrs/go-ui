@@ -28,16 +28,16 @@ func (it *ItemTable) HtmlNode() *html.Node {
 func NewFormElem(id, cap string, pn *html.Node) *ItemTable {
 
 	var (
-		foot    = types.NewElementFromAtom(atom.Tfoot)
-		caption = types.NewElementFromAtom(atom.Caption)
+		foot    = types.NewNodeFromAtom(atom.Tfoot)
+		caption = types.NewNodeFromAtom(atom.Caption)
 		it      = &ItemTable{
-			iTable: types.NewElementFromAtom(atom.Table, html.Attribute{
+			iTable: types.NewNodeFromAtom(atom.Table, html.Attribute{
 				Key: atom.Id.String(),
 				Val: fmt.Sprintf("%s-%s", itemTablePrefix, id),
 			}),
 			id:         id,
 			parent:     pn,
-			body:       types.NewElementFromAtom(atom.Tbody),
+			body:       types.NewNodeFromAtom(atom.Tbody),
 			schemaData: nil,
 		}
 	)
@@ -74,12 +74,12 @@ func (it *ItemTable) BuildForm() error {
 			thId := fmt.Sprintf("%s-th-%s", itemTablePrefix, colKey)
 			switch node.DataAtom {
 			case atom.Label:
-				tr = types.NewElementFromAtom(atom.Tr, html.Attribute{
+				tr = types.NewNodeFromAtom(atom.Tr, html.Attribute{
 					Key: atom.Id.String(),
 					Val: fmt.Sprintf("%s-tr-%s", itemTablePrefix, colKey),
 				})
 				it.getBody().AppendChild(tr)
-				th := types.NewElementFromAtom(atom.Th, html.Attribute{
+				th := types.NewNodeFromAtom(atom.Th, html.Attribute{
 					Key: atom.Id.String(),
 					Val: thId,
 				}, html.Attribute{
@@ -92,7 +92,7 @@ func (it *ItemTable) BuildForm() error {
 				th.AppendChild(node)
 				tr.AppendChild(th)
 			case atom.Input, atom.Select, atom.Textarea:
-				td := types.NewElementFromAtom(atom.Td, html.Attribute{
+				td := types.NewNodeFromAtom(atom.Td, html.Attribute{
 					Key: atom.Headers.String(),
 					Val: thId,
 				}, html.Attribute{
@@ -126,15 +126,15 @@ func (it *ItemTable) addActionButtons() {
 			Key: fmt.Sprintf("data-%s-id", itemTablePrefix),
 			Val: it.id,
 		}
-		containerDiv = types.NewElementFromAtom(atom.Div, html.Attribute{
+		containerDiv = types.NewNodeFromAtom(atom.Div, html.Attribute{
 			Key: atom.Class.String(),
 			Val: fmt.Sprintf("%s-btn-group", itemTablePrefix),
 		})
-		saveBtn = types.NewElementFromAtom(atom.Button, html.Attribute{
+		saveBtn = types.NewNodeFromAtom(atom.Button, html.Attribute{
 			Key: atom.Onclick.String(),
 			Val: fmt.Sprintf("%s.%s.save()", itemTablePrefix, it.id),
 		}, dataAttr)
-		deleteBtn = types.NewElementFromAtom(atom.Button, html.Attribute{
+		deleteBtn = types.NewNodeFromAtom(atom.Button, html.Attribute{
 			Key: atom.Onclick.String(),
 			Val: fmt.Sprintf("%s.%s.delete()", itemTablePrefix, it.id),
 		}, dataAttr)

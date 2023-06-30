@@ -18,12 +18,12 @@ type Opts struct {
 type OptFunc func(opts *Opts)
 
 func defaultOpts() Opts {
-	id := "DEFAULT-ID"
+	id := "DEFAULT-VIEW-ID"
 	return Opts{
 		viewId:  id,
 		name:    "DEFAULT-NAME",
 		comChan: make(chan *storageRequest, 1),
-		vNode: types.NewElementFromAtom(atom.Div, html.Attribute{
+		vNode: types.NewNodeFromAtom(atom.Div, html.Attribute{
 			Key: "id",
 			Val: id,
 		}),
