@@ -136,10 +136,6 @@ func (wr *WasmRouter) Start() {
 	<-channel
 }
 
-func (wr *WasmRouter) removeChildren() {
-	wr.vNode.RemoveChild()
-}
-
 type registerRouteRequest struct {
 	path      string
 	component NodeRender
