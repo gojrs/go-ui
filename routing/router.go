@@ -99,6 +99,10 @@ func (wr *WasmRouter) RouteToPath(path string) {
 	}
 
 	viewJS := docJs.Call("getElementById", wr.viewId)
+	if !viewJS.Truthy() {
+		println("could not find", wr.viewId)
+		return
+	}
 	viewJS.Set("innerHTML", string(bs))
 }
 func (wr *WasmRouter) SetViewNodeId(id string) { wr.viewId = id }
