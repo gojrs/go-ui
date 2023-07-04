@@ -13,6 +13,7 @@ type Opts struct {
 	viewId, name string
 	comChan      chan *storageRequest
 	vNode        *html.Node
+	vChildNode   *html.Node
 }
 
 type OptFunc func(opts *Opts)
@@ -86,12 +87,16 @@ func (wr *WasmRouter) RouteToPath(path string) {
 		reply:    respC,
 	}
 	answer := <-respC
+	if wr.vChildNode != nil {
+		wr.vNode.RemoveChild(wr.vChildNode)
+	}
 
 	if answer.err != nil {
 		println(answer.err.Error())
 		return
 	}
-
+	wr.vChildNode = answer.component.GetViewNode()
+	wr.vNode.AppendChild(answer.component.GetViewNode())
 	bs, err := io.ReadAll(answer.component.Render())
 	if err != nil {
 		println(err.Error())
@@ -129,6 +134,10 @@ func (wr *WasmRouter) Start() {
 	channel := make(chan struct{})
 
 	<-channel
+}
+
+func (wr *WasmRouter) removeChildren() {
+	wr.vNode.RemoveChild()
 }
 
 type registerRouteRequest struct {
