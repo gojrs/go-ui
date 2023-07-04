@@ -97,6 +97,7 @@ func (wr *WasmRouter) RouteToPath(path string) {
 		println(err.Error())
 		return
 	}
+	println("loading:", string(bs))
 
 	viewJS := docJs.Call("getElementById", wr.viewId)
 	if !viewJS.Truthy() {
