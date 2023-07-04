@@ -43,6 +43,7 @@ func NewWasmRouter(opts ...OptFunc) *WasmRouter {
 	w := &WasmRouter{
 		Opts: o,
 	}
+	js.Global().Set("Link", js.FuncOf(w.Link))
 	go w.startStorage(false)
 	return w
 }
@@ -109,6 +110,15 @@ func (wr *WasmRouter) RouteToPath(path string) {
 		return
 	}
 	viewJS.Set("innerHTML", string(bs))
+}
+
+func (wr *WasmRouter) Link(this js.Value, i []js.Value) interface{} {
+	var (
+		path = i[0].String()
+	)
+	wr.RouteToPath(path)
+
+	return nil
 }
 func (wr *WasmRouter) SetViewNodeId(id string) { wr.viewId = id }
 func (wr *WasmRouter) GetViewNode() *html.Node { return wr.vNode }
