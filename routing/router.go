@@ -43,7 +43,10 @@ func NewWasmRouter(opts ...OptFunc) *WasmRouter {
 	w := &WasmRouter{
 		Opts: o,
 	}
-	js.Global().Set("Link", js.FuncOf(w.Link))
+	emptyObj := make(map[string]any)
+	js.Global().Set("Router", emptyObj)
+	ns := js.Global().Get("Router")
+	ns.Set("Link", js.FuncOf(w.Link))
 	go w.startStorage(false)
 	return w
 }
