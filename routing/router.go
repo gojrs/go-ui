@@ -9,6 +9,8 @@ import (
 	"syscall/js"
 )
 
+var currentRenderer NodeRender
+
 type Opts struct {
 	viewId, name string
 	comChan      chan *storageRequest
@@ -95,13 +97,20 @@ func (wr *WasmRouter) RouteToPath(path string) {
 		wr.vNode.RemoveChild(wr.vChildNode)
 	}
 
+	if currentRenderer != nil {
+		currentRenderer.Destroy()
+	}
+
 	if answer.err != nil {
 		println(answer.err.Error())
 		return
 	}
-	wr.vChildNode = answer.component.GetViewNode()
-	wr.vNode.AppendChild(answer.component.GetViewNode())
-	bs, err := io.ReadAll(answer.component.Render())
+	currentRenderer = answer.component
+	currentRenderer.Init()
+	wr.vChildNode = currentRenderer.GetViewNode()
+	wr.vNode.AppendChild(currentRenderer.GetViewNode())
+
+	bs, err := io.ReadAll(currentRenderer.Render())
 	if err != nil {
 		println(err.Error())
 		return

@@ -15,6 +15,7 @@ type NodeRouter interface {
 type NodeRender interface {
 	Render() io.Reader
 	Destroy()
+	Init()
 	Name() string
 	Guard(userName string) bool
 	GetViewNode() *html.Node
