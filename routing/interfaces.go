@@ -8,7 +8,7 @@ import (
 type NodeRouter interface {
 	Name() string
 	RouteToPath(path string)
-
+	Start()
 	RegisterPath(path string, component NodeRender) error
 }
 
