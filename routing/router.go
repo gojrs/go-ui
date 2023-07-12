@@ -155,6 +155,17 @@ func (wr *WasmRouter) RegisterPath(path string, component NodeRender) error {
 func (wr *WasmRouter) Start() {
 	channel := make(chan struct{})
 
+	var (
+		objName = "Router"
+		ns      = js.Global().Get(objName)
+	)
+	if !ns.Truthy() {
+		emptyObj := make(map[string]any)
+		js.Global().Set(objName, emptyObj)
+		ns = js.Global().Get(objName)
+	}
+	ns.Set("Link", wr.Link)
+
 	<-channel
 }
 
