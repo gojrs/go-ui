@@ -19,5 +19,4 @@ type NodeRender interface {
 	Name() string
 	Guard(userName string) bool
 	GetViewNode() *html.Node
-	ApiURL(string)
 }
