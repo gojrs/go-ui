@@ -164,7 +164,7 @@ func (wr *WasmRouter) Start() {
 		js.Global().Set(objName, emptyObj)
 		ns = js.Global().Get(objName)
 	}
-	//ns.Set("Link", wr.Link)
+	ns.Set("Link", wr.Link)
 
 	<-channel
 }
