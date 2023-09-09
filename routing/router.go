@@ -162,8 +162,7 @@ func (wr *WasmRouter) Start() {
 	if !ns.Truthy() {
 		emptyObj := make(map[string]any)
 		js.Global().Set(objName, emptyObj)
-		ns = js.Global().Get(objName)
-		ns.Set("Link", wr.Link)
+		js.Global().Get(objName).Set("Link", wr.Link)
 	}
 
 	<-channel
